@@ -79,14 +79,15 @@ public class ObsForPersonDataEvaluator implements PersonDataEvaluator {
 		
 		List<Object> queryResult = qs.executeHqlQuery(hql.toString(), m);
 		
-		ListMap<Integer, Obs> obsForPatients = new ListMap<Integer, Obs>();
+		ListMap<Integer, String> obsForPatients = new ListMap<Integer, String>();
+		
 		for (Object o : queryResult) {
 			Obs obs = (Obs)o;
-			obsForPatients.putInList(obs.getPersonId(), obs);
+			obsForPatients.putInList(obs.getPersonId(), obs.getValueAsString(Context.getUserContext().getLocale()));
 		}
 		
 		for (Integer pId : obsForPatients.keySet()) {
-			List<Obs> l = obsForPatients.get(pId);
+			List<String> l = obsForPatients.get(pId);
 			if (def.getWhich() == TimeQualifier.LAST || def.getWhich() == TimeQualifier.FIRST) {
 				c.addData(pId, l.get(0));
 			}
